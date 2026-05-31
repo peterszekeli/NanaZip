@@ -4,7 +4,7 @@ This report documents concrete concurrency risks found in `NanaZip.UI.Classic` a
 
 ## 1) Data race in lazy initialization of `NtQueryInformationFile`
 
-- **Location:** `/tmp/workspace/peterszekeli/NanaZip/NanaZip.UI.Classic/SevenZip/CPP/7zip/UI/FileManager/FSFolder.cpp` (lines ~465-478)
+- **Location:** `NanaZip.UI.Classic/SevenZip/CPP/7zip/UI/FileManager/FSFolder.cpp` (lines ~465-478)
 - **Current pattern:**
   - Uses mutable globals:
     - `static Func_NtQueryInformationFile f_NtQueryInformationFile;`
@@ -23,7 +23,7 @@ This report documents concrete concurrency risks found in `NanaZip.UI.Classic` a
 
 ## 2) Data race in lazy loading of `Psapi.dll` handle
 
-- **Location:** `/tmp/workspace/peterszekeli/NanaZip/NanaZip.UI.Classic/SevenZip/CPP/7zip/UI/FileManager/PanelItemOpen.cpp` (lines ~187, ~227-233)
+- **Location:** `NanaZip.UI.Classic/SevenZip/CPP/7zip/UI/FileManager/PanelItemOpen.cpp` (lines ~187, ~227-233)
 - **Current pattern:**
   - Global mutable state:
     - `static HMODULE g_Psapi_dll_module;`
@@ -39,8 +39,8 @@ This report documents concrete concurrency risks found in `NanaZip.UI.Classic` a
 ## 3) Potential UI-thread deadlock during close flow
 
 - **Locations:**
-  - `/tmp/workspace/peterszekeli/NanaZip/NanaZip.UI.Classic/SevenZip/CPP/7zip/UI/FileManager/MyLoadMenu.cpp` (line ~708)
-  - `/tmp/workspace/peterszekeli/NanaZip/NanaZip.UI.Classic/SevenZip/CPP/7zip/UI/FileManager/PanelItemOpen.cpp` (line ~1391)
+  - `NanaZip.UI.Classic/SevenZip/CPP/7zip/UI/FileManager/MyLoadMenu.cpp` (line ~708)
+  - `NanaZip.UI.Classic/SevenZip/CPP/7zip/UI/FileManager/PanelItemOpen.cpp` (line ~1391)
 - **Current pattern:**
   - UI close command calls `g_ExitEventLauncher.Exit(false)` (non-hard exit waits for worker completion).
   - Worker thread path may call `SendMessage(...)` back to UI thread (`kOpenItemChanged`).
