@@ -21,7 +21,7 @@ If the UI thread enters `Exit()` and waits on worker thread handles while a work
 
 **Proposed fix**
 
-1. Replace worker-thread `SendMessage()` with `PostMessage()` (or `SendMessageTimeout()` with timeout and fallback).
+1. Replace worker-thread `SendMessage()` with `PostMessage()` (or use `SendMessageTimeout()` with a bounded timeout such as 1-2 seconds and a safe fallback path).
 2. If synchronous result is required, use an event/future-style completion object instead of blocking the UI thread.
 3. In shutdown paths, avoid indefinite waits from the UI thread when workers can call back into UI message handling.
 
@@ -40,7 +40,7 @@ The global state is read/written without a lock or atomic operations. Multiple c
 **Proposed fix**
 
 1. Add a critical section/mutex inside `CExitEventLauncher` and guard all accesses to `_threads`, `_numActiveThreads`, and `_needExit`.
-2. Prefer removing `_numActiveThreads` and deriving the active count from the same lock-protected thread container to keep one authoritative source of truth.
+2. Remove `_numActiveThreads` and derive the active count from the same lock-protected thread container to keep one authoritative source of truth.
 3. Consolidate thread registration/join logic into methods on `CExitEventLauncher` so callers do not mutate internals directly.
 
 ## Risk 3: Non-thread-safe lazy initialization for `NtQueryInformationFile`
