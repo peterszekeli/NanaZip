@@ -63,7 +63,7 @@ The one-time initialization check uses plain globals with no synchronization. Co
 
 **Where**
 
-- `PanelItemOpen.cpp:1280-1286` (loop breaks when `handles.Size() > 60`; this allows up to 61 process handles in the set and keeps the internal cap below the Win32 `MAXIMUM_WAIT_OBJECTS` limit of 64)
+- `PanelItemOpen.cpp:1280-1286` (loop breaks when `handles.Size() > 60`; this applies a conservative internal cap to keep the wait set below the Win32 `MAXIMUM_WAIT_OBJECTS` limit of 64)
 - `PanelItemOpen.cpp:1421-1430` (temp file/folder deletion after wait logic)
 
 **Why this is risky**
