@@ -52,7 +52,7 @@ The global state is read/written without a lock or atomic operations. Multiple c
 
 **Why this is risky**
 
-The one-time initialization check uses plain globals with no synchronization. Concurrent calls to `ReadChangeTime()` can race during first access, causing undefined behavior and partially-initialized state visibility.
+The one-time initialization check uses plain globals with no synchronization. Concurrent calls to `ReadChangeTime()` can race during first access, causing unpredictable behavior and partially-initialized state visibility.
 
 **Proposed fix**
 
@@ -63,7 +63,7 @@ The one-time initialization check uses plain globals with no synchronization. Co
 
 **Where**
 
-- `PanelItemOpen.cpp:1280-1286` (loop breaks when `handles.Size() > 60`; this enforces an internal cap below the Win32 `MAXIMUM_WAIT_OBJECTS` limit of 64)
+- `PanelItemOpen.cpp:1280-1286` (loop breaks when `handles.Size() > 60`; this allows up to 61 process handles in the set and keeps the internal cap below the Win32 `MAXIMUM_WAIT_OBJECTS` limit of 64)
 - `PanelItemOpen.cpp:1421-1430` (temp file/folder deletion after wait logic)
 
 **Why this is risky**
