@@ -40,7 +40,7 @@ The global state is read/written without a lock or atomic operations. Multiple c
 **Proposed fix**
 
 1. Add a critical section/mutex inside `CExitEventLauncher` and guard all accesses to `_threads`, `_numActiveThreads`, and `_needExit`.
-2. Replace `_numActiveThreads` with a value derived from the protected thread container, or make it atomic and still protect handle ownership transitions with a lock.
+2. Prefer removing `_numActiveThreads` and deriving the active count from the same lock-protected thread container to keep one authoritative source of truth.
 3. Consolidate thread registration/join logic into methods on `CExitEventLauncher` so callers do not mutate internals directly.
 
 ## Risk 3: Non-thread-safe lazy initialization for `NtQueryInformationFile`
