@@ -21,7 +21,7 @@ If the UI thread enters `Exit()` and waits on worker thread handles while a work
 
 **Proposed fix**
 
-1. Replace worker-thread `SendMessage()` with `PostMessage()` (or use `SendMessageTimeout()` with a bounded timeout and a safe fallback path). If a fixed value is needed, 1500 ms is a reasonable starting point because it limits prolonged UI stalls while still allowing short UI-handler bursts; tune it with telemetry.
+1. Replace worker-thread `SendMessage()` with `PostMessage()` (or use `SendMessageTimeout()` with a bounded timeout and a safe fallback path).
 2. If synchronous result is required, use an event/future-style completion object instead of blocking the UI thread.
 3. In shutdown paths, avoid indefinite waits from the UI thread when workers can call back into UI message handling.
 
@@ -63,7 +63,7 @@ The one-time initialization check uses plain globals with no synchronization. Co
 
 **Where**
 
-- `PanelItemOpen.cpp:1280-1286` (loop breaks when `handles.Size() > 60`; this keeps the wait set below the Win32 `MAXIMUM_WAIT_OBJECTS` limit of 64, since up to 61 process handles plus one exit-event handle yields 62 total handles)
+- `PanelItemOpen.cpp:1280-1286` (loop breaks when `handles.Size() > 60`; this enforces an internal cap below the Win32 `MAXIMUM_WAIT_OBJECTS` limit of 64)
 - `PanelItemOpen.cpp:1421-1430` (temp file/folder deletion after wait logic)
 
 **Why this is risky**
