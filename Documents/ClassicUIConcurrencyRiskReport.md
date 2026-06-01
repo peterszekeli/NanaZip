@@ -4,9 +4,9 @@ This report reviews concurrency-sensitive code paths in the classic UI implement
 
 ## Scope
 
-- `/tmp/workspace/peterszekeli/NanaZip/NanaZip.UI.Classic/SevenZip/CPP/7zip/UI/FileManager/PanelItemOpen.cpp`
-- `/tmp/workspace/peterszekeli/NanaZip/NanaZip.UI.Classic/SevenZip/CPP/7zip/UI/FileManager/Panel.h`
-- `/tmp/workspace/peterszekeli/NanaZip/NanaZip.UI.Classic/SevenZip/CPP/7zip/UI/FileManager/FSFolder.cpp`
+- `NanaZip.UI.Classic/SevenZip/CPP/7zip/UI/FileManager/PanelItemOpen.cpp`
+- `NanaZip.UI.Classic/SevenZip/CPP/7zip/UI/FileManager/Panel.h`
+- `NanaZip.UI.Classic/SevenZip/CPP/7zip/UI/FileManager/FSFolder.cpp`
 
 ## Risk 1: UI-thread deadlock via synchronous cross-thread messaging
 
