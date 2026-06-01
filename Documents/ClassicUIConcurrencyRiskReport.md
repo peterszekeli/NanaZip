@@ -72,7 +72,7 @@ The wait set intentionally truncates tracked handles. If many child processes ex
 
 **Proposed fix**
 
-1. Process handles in stable chunks until all `NeedWait` entries are observed complete.
+1. Process handles in stable chunks until all `NeedWait` entries are observed as complete.
 2. Delay delete/repack operations until all tracked child processes are confirmed done.
 3. Emit diagnostic logging when handle truncation occurs to aid field diagnosis.
 
